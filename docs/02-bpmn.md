@@ -1,8 +1,8 @@
-# Procesos BPMN
+# Procesos BPMN:
 
 Esta sección presenta el proceso de incorporación en dos versiones: el *as-is*, tal como se ejecuta hoy, y el *to-be*, con la automatización propuesta.
 
-## BPMN as-is
+## BPMN as-is:
 
 ![BPMN as-is](<../assets/BPMN_(AS-IS).png>)
 
@@ -21,7 +21,7 @@ El proceso actual es fundamentalmente secuencial: cada actividad espera a que la
 
 No existe ningún punto en que las actividades se ejecuten en paralelo, pese a que varias son independientes entre sí. Esa es la principal oportunidad de mejora que recoge el rediseño.
 
-## BPMN to-be
+## BPMN to-be:
 
 ![BPMN to-be](<../assets/BPMN_(TO-BE n8n).png>)
 
@@ -41,7 +41,7 @@ Una vez ejecutadas las siete ramas, el flujo converge en un gateway de sincroniz
 
 **Pools y lanes:** Nuevo Trabajador | n8n (Automatización) | Chief of Staff / RRHH | Líder de Área | Onboarding Buddy.
 
-## Explicación de mejoras
+## Explicación de mejoras:
 
 **Qué se automatiza:** La propuesta reemplaza la planilla de Google Sheets por un repositorio único y trazable, y hace que al completarse el formulario se disparen por sí solas las siete notificaciones mediante n8n. Esto significa pasar de horas o días de gestión manual a minutos, ya que las ramas se ejecutan en paralelo.
 

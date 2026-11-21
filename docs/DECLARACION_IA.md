@@ -12,7 +12,7 @@ delegó a la herramienta.
 |---|---|
 | Claude (Anthropic) | Apoyo en redacción y estructura del informe, revisión del esquema SQL, generación del script de datos sintéticos y revisión del flujo n8n exportado |
 
-*(Completar si el equipo usó además otra herramienta, por ejemplo ChatGPT o GitHub Copilot.)*
+No se utilizó ninguna otra herramienta de inteligencia artificial en esta entrega.
 
 ## En qué se usó
 

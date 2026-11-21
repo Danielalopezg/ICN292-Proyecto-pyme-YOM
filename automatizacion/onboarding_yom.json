@@ -1,0 +1,894 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "ID_PLANILLA_FORMULARIO_DATOS_GENERALES",
+          "mode": "list",
+          "cachedResultName": "Formulario de Recolección de Datos Generales (Respuestas)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/ID_PLANILLA_FORMULARIO_DATOS_GENERALES/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1439306343,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/ID_PLANILLA_FORMULARIO_DATOS_GENERALES/edit#gid=1439306343"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        192
+      ],
+      "id": "e8b1201d-efa0-4eab-91f6-965619fc8e12",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Google Sheets Trigger account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bfc888ba-a198-4576-b0a1-a99e3fda6097",
+              "name": "nombre",
+              "value": "={{ $json['Nombre '] }}",
+              "type": "string"
+            },
+            {
+              "id": "fd10012b-5688-44a8-a3e8-58db1e1d5744",
+              "name": "email",
+              "value": "={{ $json['Email '] }}",
+              "type": "string"
+            },
+            {
+              "id": "727481b6-fc3c-45c5-9f21-f810565ef4d3",
+              "name": "=fechaIngreso",
+              "value": "={{ (() => {\n  const serial = $json['Fecha de entrada '];\n\n  if (typeof serial !== \"number\") return serial;\n\n  // ORIGEN CORRECTO para Google Sheets\n  const epoch = new Date(Date.UTC(1899, 11, 30));\n  const date = new Date(epoch.getTime() + serial * 86400000);\n\n  return date.toISOString().slice(0,10); // YYYY-MM-DD\n})() }}\n",
+              "type": "string"
+            },
+            {
+              "id": "32d4ab90-f514-41ec-ab95-795f62845072",
+              "name": "buddyNombre",
+              "value": "={{$json[\"Onboarding Buddy\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "0edaa84f-2aeb-4033-9483-7c7064085a8d",
+              "name": "buddyEmail",
+              "value": "={{$json[\"Email Onboarding Buddy\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "19e61223-c9c3-4cb3-9eab-fcc6044dd12e",
+              "name": "createdAt",
+              "value": "={{ $json['Fecha de entrada '] }}\n",
+              "type": "string"
+            },
+            {
+              "id": "8a62d08b-edf8-48e7-ae9d-7c50d9a9c78c",
+              "name": "estado",
+              "value": "=Datos solicitados",
+              "type": "string"
+            },
+            {
+              "id": "532db008-a871-4dde-8034-4498ebd4cafd",
+              "name": "onboardingId",
+              "value": "={{$json['Email '].toLowerCase().trim() + \"-\" + new Date().toISOString().slice(0,10).replaceAll(\"-\",\"\")}}",
+              "type": "string"
+            },
+            {
+              "id": "2de17ec4-8849-48cb-86d4-543a7683ba0a",
+              "name": "procesado",
+              "value": "=={{ ($json[\"procesado\"] ?? \"\").toString().trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "7993ed1f-b5ca-45fa-a897-a518c377a30e",
+              "name": "nuevocorreo",
+              "value": "={{ $('Google Sheets Trigger').item.json['Correo nuevo yom'] }}",
+              "type": "string"
+            },
+            {
+              "id": "c9193b81-37a4-4654-bd30-da6575db929f",
+              "name": "telefonobuddy",
+              "value": "={{ $('Google Sheets Trigger').item.json['Teléfono Onboarding Buddy'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ddff179c-9733-4165-84ac-78d9260178b1",
+              "name": "cargo",
+              "value": "={{ $json['Cargo nuevo integrante'] }}",
+              "type": "string"
+            },
+            {
+              "id": "14fd080f-f489-47be-bc2c-fb96a066b186",
+              "name": "lider",
+              "value": "={{ $json['Líder'] }}",
+              "type": "string"
+            },
+            {
+              "id": "217bef01-303a-4cf6-8237-4c991c686d91",
+              "name": "liderEmail",
+              "value": "={{ $json['Email Líder'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7c315306-2634-4af7-a01c-76189d896484",
+              "name": "contraseña",
+              "value": "={{ $json['Contraseña provisional'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1bdd9fbd-89d3-472d-aa57-530c1a46686f",
+              "name": "Link Carta de Oferta",
+              "value": "={{ $json['Link Carta de Oferta'] }}",
+              "type": "string"
+            },
+            {
+              "id": "14be16b5-b86c-426c-9b9f-131108fb1fcf",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -656,
+        192
+      ],
+      "id": "7776ec5a-c47e-4a3a-a50c-e74ccebfc7ef",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "ID_PLANILLA_ONBOARDING_MASTER",
+          "mode": "list",
+          "cachedResultName": "Onboarding_Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/ID_PLANILLA_ONBOARDING_MASTER/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/ID_PLANILLA_ONBOARDING_MASTER/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "onboardingId": "={{ $json.onboardingId }}",
+            "fechaIngreso": "={{ $json.fechaIngreso }}",
+            "buddyNombre": "={{ $json.buddyNombre }}",
+            "buddyEmail": "={{ $json.buddyEmail }}",
+            "createdAt": "={{ $json.createdAt }}",
+            "estado": "={{ $json.estado }}",
+            "nombre": "={{ $json.nombre }}",
+            "email": "={{ $json.email }}",
+            "nuevocorreo": "={{ $json.nuevocorreo }}",
+            "telefonobuddy": "={{ $json.telefonobuddy }}",
+            "cargo": "={{ $json.cargo }}",
+            "lider": "={{ $json.lider }}",
+            "liderEmail": "={{ $json.liderEmail }}",
+            "cartaLink": "={{ $json['Link Carta de Oferta'] }}",
+            "contrasenha": "={{ $json['contraseña'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "onboardingId",
+              "displayName": "onboardingId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fechaIngreso",
+              "displayName": "fechaIngreso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buddyNombre",
+              "displayName": "buddyNombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buddyEmail",
+              "displayName": "buddyEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lider",
+              "displayName": "lider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "liderEmail",
+              "displayName": "liderEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cartaLink",
+              "displayName": "cartaLink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contrasenha",
+              "displayName": "contrasenha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reunionAgendada",
+              "displayName": "reunionAgendada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "folderId",
+              "displayName": "folderId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "folderUrl",
+              "displayName": "folderUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "afpAfiliacionFileIds",
+              "displayName": "afpAfiliacionFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "afpUltimasCotizacionesFileIds",
+              "displayName": "afpUltimasCotizacionesFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "saludAfiliacionFileIds",
+              "displayName": "saludAfiliacionFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cedulaFileIds",
+              "displayName": "cedulaFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "antecedentesFileIds",
+              "displayName": "antecedentesFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fotoPersonalFileIds",
+              "displayName": "fotoPersonalFileIds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "meetingEventId",
+              "displayName": "meetingEventId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cargo",
+              "displayName": "cargo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "correoEnviadoAt",
+              "displayName": "correoEnviadoAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nuevocorreo",
+              "displayName": "nuevocorreo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telefonobuddy",
+              "displayName": "telefonobuddy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -336,
+        320
+      ],
+      "id": "02bcd0de-6f48-4c50-ad41-0c5eaa95f8ba",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5da33ed7-3608-4a84-b5aa-be9b8dd2e4a9",
+              "leftValue": "=={{$json.procesado}}\n",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -496,
+        192
+      ],
+      "id": "80fc5d9e-bd82-4b6a-a0cf-20f05732bb09",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Quédate solo con el último item (la última fila que llegó)\nreturn [items[items.length - 1]];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        192
+      ],
+      "id": "70308be6-a8ac-45fd-8321-3b9feb6da794",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1) Lee fechaIngreso desde el item actual o desde Edit Fields\nconst raw =\n  $json.fechaIngreso ??\n  $json[\"fechaIngreso\"] ??\n  $json[\"Fecha ingreso\"] ??\n  $('Edit Fields').item?.json?.fechaIngreso;\n\nif (!raw) {\n  throw new Error(\"fechaIngreso viene vacío/undefined. Revisa el nodo Edit Fields.\");\n}\n\n// 2) Normaliza a string\nlet s = raw;\nif (typeof s === \"object\" && s !== null) s = s.value ?? s.date ?? s.start ?? s.toString();\ns = String(s).trim();\n\n// 3) Extrae fecha en formato YYYY-MM-DD o DD/MM/YYYY\nlet isoDate = null;\n\n// Caso 1: ya viene YYYY-MM-DD\nconst m1 = s.match(/\\b(\\d{4}-\\d{2}-\\d{2})\\b/);\nif (m1) isoDate = m1[1];\n\n// Caso 2: viene DD/MM/YYYY\nif (!isoDate) {\n  const m2 = s.match(/\\b(\\d{2})\\/(\\d{2})\\/(\\d{4})\\b/);\n  if (m2) {\n    const [_, dd, mm, yyyy] = m2;\n    isoDate = `${yyyy}-${mm}-${dd}`;\n  }\n}\n\nif (!isoDate) {\n  throw new Error(`No pude reconocer una fecha en fechaIngreso: \"${s}\"`);\n}\n\n// 4) Construye start/end con zona horaria Chile (-03:00)\nconst start = new Date(`${isoDate}T10:00:00-03:00`);\nconst end = new Date(start.getTime() + 60 * 60 * 1000);\n\nif (isNaN(start.getTime()) || isNaN(end.getTime())) {\n  throw new Error(`Fecha inválida luego de parsear. isoDate=\"${isoDate}\" raw=\"${s}\"`);\n}\n\nreturn [\n  {\n    ...$json,\n    startDateTimeISO: start.toISOString(),\n    endDateTimeISO: end.toISOString(),\n    debug_rawFechaIngreso: s,\n    debug_isoDate: isoDate,\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        672
+      ],
+      "id": "31a45145-41b7-4e20-88ce-d7e56cb9f7af",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=¡Bienvenido/a a YOM!",
+        "message": "=<p>¡Hola {{ $json.nombre }}!</p>\n\n<p>\n  ¿Cómo va todo? Espero que estés muy bien. Nos place darte la más cordial bienvenida a nuestro equipo de YOMERS.\n  Esperamos que unirte a nuestro grupo sea de gran provecho para tu vida. Sabemos que queda menos de un mes para tu\n  incorporación y estamos muy contentos de tenerte próximamente en nuestro team.\n</p>\n\n<p>\n  Desde ya, te invitamos a sentirte parte de este gran equipo, porque has comenzado a ser un Yomer.\n</p>\n\n<p>\n  Necesitamos tu ayuda para diligenciar los documentos presentes en el link a continuación, \n  por lo que te solicitamos llenar el siguiente formulario:\n</p>\n\n<p>\n  Formulario Trabajador:<br>\n  <a href=\"https://forms.gle/FORMULARIO_TRABAJADOR\">\n    https://forms.gle/FORMULARIO_TRABAJADOR\n  </a>\n</p>\n\n<p>\n  Quedamos atentos al envío de estos documentos para poder gestionar tu contrato y resolver cualquier duda que puedas tener.\n  Idealmente, te pedimos enviar todo esto lo más pronto posible.\n</p>\n\n<p>\n  <strong>Tu líder directo será:</strong><br>\n  {{ $json.lider }}\n</p>\n\n<p>\n  <strong>Carta de oferta:</strong><br>\n  Puedes revisar tu carta de oferta en el siguiente enlace:<br>\n  <a href=\"{{ $json.cartaLink }}\">\n    {{ $json.cartaLink }}\n  </a>\n</p>\n\n<p>\n  <strong>Tu nuevo correo corporativo:</strong><br>\n  {{ $json.nuevocorreo }}\n</p>\n\n<p>\n  <strong>Contraseña provisoria:</strong><br>\n  {{ $json.contrasenha }}\n</p>\n\n<p>\n  Por favor completa el formulario utilizando este mismo correo:\n  <strong>{{ $json.email }}</strong>\n</p>\n\n<p>\n  Ante cualquier duda, no dudes en escribirnos.\n</p>\n\n<p>Saludos y un abrazo.</p>\n\n\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        144
+      ],
+      "id": "90d03a03-9a7a-4488-a05f-927a6fafb9c0",
+      "name": "Bienvenida a Yom",
+      "webhookId": "0f25a9eb-01eb-40cb-a6e3-4bb5625293f4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Gmail account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Append row in sheet').item.json.email }}",
+        "subject": "¡Tu bienvenida a Yom! ",
+        "message": "=<p>\n  Hola {{ $('Append row in sheet').item.json.nombre }}\n</p>\n\n<p>\n  ¡Estamos muy felices de darte la bienvenida a Yom!\n</p>\n\n<p>\n  Queremos contarte algunos detalles prácticos para tu primer día:\n</p>\n\n<p>\n  <strong>Fecha de ingreso:</strong>\n  {{ $('Append row in sheet').item.json.fechaIngreso }}<br>\n  <strong>Hora de llegada:</strong>\n  A las 10 AM (sólo válido para el primer día)<br>\n  <strong>Código de vestimenta:</strong>\n  cómoda / casual / lo que te haga sentir tú<br>\n  <strong>Horario:</strong>\n  Normalmente esperamos que vengas de 9 a 6, pero es flexible. No estaremos marcando tarjeta ni controlandote.\n</p>\n\n<p>\n  <strong>Ubicación:</strong>\n  Presidente Errázuriz 2999, Las Condes\n</p>\n\n<p>\n  El día de tu llegada te estará esperando\n  <strong>{{ $('Append row in sheet').item.json.buddyNombre }}</strong>,\n  quien te recibirá y acompañará en tus primeros pasos en Yom.\n</p>\n\n<p>\n  Puedes contactarle directamente si tienes cualquier duda:\n</p>\n\n<p>\n  <strong>Contacto:</strong>\n  {{ $('Append row in sheet').item.json.buddyNombre }} –\n  {{ $('Append row in sheet').item.json.buddyEmail }}<br>\n  <strong>Teléfono / WhatsApp:</strong>\n  {{ $('Append row in sheet').item.json.telefonobuddy }}\n</p>\n\n<p>\n  No te preocupes por nada más, ese día iremos viendo todo con calma 😊\n</p>\n\n<p>\n  Cualquier pregunta previa, escríbenos sin problema.\n</p>\n\n<p>\n  ¡Nos vemos pronto y nuevamente te damos una cálida bienvenida a Yom! 💛\n</p>\n\n<p>\n  Un abrazo\n</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        320
+      ],
+      "id": "47e3d48d-eb35-4a7f-a0d6-7827d3d79902",
+      "name": "Datos importantes a nuevo Yomer",
+      "webhookId": "d62d6bed-cd4c-4f50-aca9-6a2998ef4e4c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Gmail account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "ID_CANAL_SLACK_GENERAL",
+          "mode": "id"
+        },
+        "text": "=📣 *Nuevo ingreso en Yom* 🎉\n\nHola a todos:\n\n¡El día {{ $json.fechaIngreso }} recibiremos a un nuevo Yomer! \nSu nombre es {{ $json.nombre }} y entrará al cargo de {{ $json.cargo }}.\n\nPara que podamos darle la bienvenida y se sienta a gusto 🚀\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        496
+      ],
+      "id": "0f1e754c-3f18-4acf-b8c5-188691c002d0",
+      "name": "Aviso de bienvenida al team de Yom",
+      "webhookId": "f2cc57a9-868e-4ba7-85b9-e88d3ce987ae",
+      "credentials": {
+        "slackApi": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Cultura-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.buddyEmail }}",
+        "subject": "=Indicaciones para el Onboarding de  {{ $json.nombre }}",
+        "message": "=<p>Estimado/a {{ $json.buddyNombre }}</p>\n\n<p>\nJunto con saludarte, te recordamos que estas son algunas de las cosas que necesitarás\npara realizar una correcta bienvenida a {{ $json.nombre }}:\n</p>\n\n<p>\nPresentación de cultura:\n<a href=\"https://docs.google.com/presentation/d/PRESENTACION_CULTURA\">\nhttps://docs.google.com/presentation/d/PRESENTACION_CULTURA\n</a>\n</p>\n\n\n<p>\nTe recordamos que ya se agendó la reunión correspondiente con {{ $json.nombre }}\nen Google Calendar.\n</p>\n\n<p>\nSaludos,<br>\nEquipo de Automatización<br>\nProceso de Bienvenida.\n</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        848
+      ],
+      "id": "1fed59e1-7be5-4f8f-9127-2d69a77e83f8",
+      "name": "Indicaciones Onboarding Buddy",
+      "webhookId": "84223ec8-2014-4c69-9373-c641b26813b7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Gmail account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "calendario-cultura@empresa.cl",
+          "mode": "list",
+          "cachedResultName": "calendario-cultura@empresa.cl"
+        },
+        "start": "=\n{{ $json.startDateTimeISO }}",
+        "end": "={{ $json.endDateTimeISO }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $json.nuevocorreo }}",
+            "={{ $json.buddyEmail }}"
+          ],
+          "summary": "=Reunión onboarding nuevo ingreso de  {{ $json.nombre }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        672
+      ],
+      "id": "47ca2fbd-d8b7-4a03-b6da-ae4df366a539",
+      "name": "Reunión entre Nuevo Yomer y Onboarding Buddy",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Cultura"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ $json.end.dateTime }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        672
+      ],
+      "id": "2df91fe3-3bcb-440b-b178-5ede5c230b6e",
+      "name": "Wait",
+      "webhookId": "da89e162-5c88-4bd2-85b3-fd8722d77450"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "ID_CANAL_SLACK_GENERAL",
+          "mode": "id"
+        },
+        "text": "=:sparkles: *¡Bienvenido/a a Yom!* :sparkles:\n\nNos complace anunciar que hoy se integra :confetti_ball:\n*{{ $('Code in JavaScript1').item.json.nombre }}*\nal cargo de *{{ $('Code in JavaScript1').item.json.cargo }}*. :partying_face: :raised_hands:\n\nDurante la semana, *{{ $('Code in JavaScript1').item.json.nombre }}*\nrecibirá una sorpresa de bienvenida :gift: a programar por el Team Cultura :yellow_heart:,\ny como todos somos cultura: ¡Todos te deseamos un increíble inicio en Yom! :rocket: :tada:\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        672
+      ],
+      "id": "dc468c85-d11a-4d0f-9e84-df13626351c9",
+      "name": "Mensaje de bienvenida automatizado",
+      "webhookId": "7619a2ea-5cbf-4330-a250-ba6dbc62d12c",
+      "credentials": {
+        "slackApi": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Cultura-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "ID_USUARIO_SLACK_CHIEF_OF_STAFF",
+          "mode": "id"
+        },
+        "text": "=🆕 *Nuevo ingreso confirmado*  \n👤 Nombre: {{$json.nombre}} \n📧 Email: {{$json.email}} \n📅 Fecha de ingreso: {{$json.fechaIngreso}}  \n🤝 Buddy asignado: - {{$json.buddyNombre}} ({{$json.buddyEmail}})  \n👉 Acción requerida: crear accesos del nuevo trabajador",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        320
+      ],
+      "id": "50d1478e-a9c1-4904-bb65-0c6a5cabdde8",
+      "name": "Aviso a Sofi: creación de accesos",
+      "webhookId": "75bc272d-6b28-4b9c-8df1-5276c0d770c5",
+      "credentials": {
+        "slackApi": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Cultura-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.liderEmail }}",
+        "subject": "RECORDATORIO",
+        "message": "=<p>Hola {{ $json.lider }},</p>\n\n<p>\n  Te recordamos que eres el líder encargado de <strong>{{ $json.nombre }}</strong>, \n  nuestro nuevo Yomer.\n</p>\n\n<p>\n  Su <strong>Onboarding Buddy</strong> será <strong>{{ $json.buddyNombre }}</strong>.\n</p>\n\n<p>\n  La fecha de ingreso es el día <strong>{{ $json.fechaIngreso }}</strong> a las \n  <strong>10:00 AM</strong>, por lo que te agradecemos darle la bienvenida como corresponde.\n</p>\n\n<p>\n  ¡Muchas gracias por tu apoyo en este proceso!\n</p>\n\n<p>Saludos.</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "ce9d3fd1-d023-4846-8128-9ec983598759",
+      "name": "Envío recordatorio a líder",
+      "webhookId": "46171fd8-93fb-4016-94b8-445c0cd8a221",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REEMPLAZAR_AL_IMPORTAR",
+          "name": "Gmail account 8"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Bienvenida a Yom",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aviso a Sofi: creación de accesos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Indicaciones Onboarding Buddy",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aviso de bienvenida al team de Yom",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Envío recordatorio a líder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Reunión entre Nuevo Yomer y Onboarding Buddy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reunión entre Nuevo Yomer y Onboarding Buddy": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Mensaje de bienvenida automatizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aviso a Sofi: creación de accesos": {
+      "main": [
+        [
+          {
+            "node": "Datos importantes a nuevo Yomer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Automatización Proceso de Onboarding (YOM)"
+}

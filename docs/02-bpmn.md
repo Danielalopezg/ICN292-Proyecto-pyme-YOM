@@ -1,60 +1,37 @@
-# Procesos BPMN:
+# 02 · BPMN
 
-Esta sección presenta el proceso de incorporación en dos versiones: el *as-is*, tal como se ejecuta hoy, y el *to-be*, con la automatización propuesta.
+| Diagrama | Original en Lucidchart | Imagen exportada |
+|---|---|---|
+| AS-IS (E1) | https://lucid.app/lucidchart/479ac530-3d5c-40a1-a643-a0ce750119ff/edit | `assets/bpmn_asis.png` |
+| TO-BE final (E2) | https://lucid.app/lucidchart/83e59d99-7da9-44f5-8383-f4097e2a85a8/edit | `assets/bpmn_tobe.png` |
 
-## BPMN as-is:
+Ambos exportados desde Lucidchart en PNG a 300 PPI, recortados al contenido.
 
-![BPMN as-is](<../assets/BPMN_(AS-IS).png>)
+## AS-IS · cómo se incorpora hoy
 
-El proceso actual es fundamentalmente secuencial: cada actividad espera a que la anterior termine y esa transición ocurre por correo o mensaje que alguien debe recordar enviar.
+![BPMN AS-IS](../assets/bpmn_asis.png)
 
-1. RRHH envía el formulario de incorporación (Google Forms) al nuevo trabajador.
-2. El trabajador completa el formulario con su nombre, RUT, contacto de emergencia y documentos; las respuestas quedan en Google Sheets.
-3. RRHH envía los datos a la agencia externa, que redacta el contrato.
-4. RRHH y la jefatura directa validan los datos, y la gerencia general confirma sueldo y beneficios cuando corresponde.
-5. El contrato se envía a Buk para la firma digital.
-6. RRHH coordina los accesos generales (correo, Slack) e Ingeniería/TI crea los accesos técnicos (Linear, repositorio, sitio web) si aplica.
-7. RRHH publica la bienvenida en Slack, agenda las reuniones y el desayuno, y avisa a la oficina según el esquema híbrido.
-8. Camino de excepción: si falta un documento, el contacto con el trabajador es manual y no estandarizado (WhatsApp o correo).
+Proceso secuencial: cada actividad espera a que termine la anterior, y esa transición ocurre por
+correo o mensaje que alguien debe acordarse de enviar. Lanes: Nuevo trabajador | Recursos Humanos |
+Jefatura / Equipo directo | Gerencia general | TI / Ingeniería | Agencia externa y Buk.
 
-**Pools y lanes:** Trabajador nuevo | RRHH | Jefatura directa | Gerencia general | Ingeniería/TI | Agencia externa / Buk.
+## TO-BE final · proceso automatizado con n8n
 
-No existe ningún punto en que las actividades se ejecuten en paralelo, pese a que varias son independientes entre sí. Esa es la principal oportunidad de mejora que recoge el rediseño.
+![BPMN TO-BE](../assets/bpmn_tobe.png)
 
-## BPMN to-be:
+El disparador es el formulario de datos generales que completa RRHH. n8n registra el ingreso en
+`Onboarding_Master` y abre un gateway paralelo con **6 ramas y 8 acciones**. Lanes: Nuevo Trabajador |
+n8n (Automatización) | Chief of Staff / RRHH | Líder de Área | Onboarding Buddy | Equipo YOM (Slack).
 
-![BPMN to-be](<../assets/BPMN_(TO-BE n8n).png>)
+## Cambios del TO-BE respecto a la Entrega 1
 
-El evento que gatilla el flujo deja de ser un correo enviado por una persona y pasa a ser el envío del formulario por parte del nuevo trabajador. Ese envío llega a n8n mediante un webhook, que registra los datos y abre un gateway paralelo (AND) desde el cual se disparan simultáneamente las siete notificaciones y acciones del proceso.
+| Entrega 1 | Entrega 2 (final) | Por qué |
+|---|---|---|
+| El disparador era el formulario del nuevo trabajador | El disparador es el **formulario de datos generales que completa RRHH** | Los datos que necesita la automatización (líder, buddy, correo corporativo, carta de oferta) los conoce RRHH, no el trabajador; así nada depende de que el trabajador responda primero |
+| No había registro explícito | Tarea **Registrar ingreso en Onboarding_Master** antes del gateway | Trazabilidad: es la fila que luego se normaliza en la base SQL |
+| 7 acciones en paralelo | **6 ramas, 8 acciones** (dos ramas son secuenciales) | Así quedó implementado y probado en n8n |
+| Bienvenida en Slack al confirmar | Anuncio previo al equipo + **mensaje el día 1 tras un evento temporizador** | El nodo `Wait` espera el fin de la reunión del primer día |
+| Sin control de duplicados | Gateway **¿Fila ya procesada?** | Corresponde al nodo `If` (ver hallazgo en `05`) |
+| Tareas en tercera persona ("Recibe…") | Tareas en infinitivo ("Enviar…", "Agendar…") | Convención BPMN verbo + objeto |
 
-| N.º | Acción automatizada | Destinatario | Canal |
-|---|---|---|---|
-| 1 | Correo de bienvenida a YOM | Nuevo trabajador | Correo electrónico |
-| 2 | Aviso de bienvenida | Nuevo trabajador | Slack |
-| 3 | Invitación a la reunión con el onboarding buddy | Nuevo trabajador | Calendario |
-| 4 | Aviso para crear los accesos (correo, Slack, sistemas) | Chief of Staff / RRHH | Slack |
-| 5 | Recordatorio de que debe incorporar a un nuevo trabajador | Líder de área | Correo o Slack |
-| 6 | Invitación a la reunión con el nuevo trabajador | Onboarding buddy | Calendario |
-| 7 | Indicaciones para completar el proceso de acompañamiento | Onboarding buddy | Correo electrónico |
-
-Una vez ejecutadas las siete ramas, el flujo converge en un gateway de sincronización que cierra el proceso. Las actividades que dependen de terceros, como la redacción del contrato y su firma en Buk, se mantienen, pero quedan registradas con fecha y estado en lugar de depender del seguimiento informal de una persona.
-
-**Pools y lanes:** Nuevo Trabajador | n8n (Automatización) | Chief of Staff / RRHH | Líder de Área | Onboarding Buddy.
-
-## Explicación de mejoras:
-
-**Qué se automatiza:** La propuesta reemplaza la planilla de Google Sheets por un repositorio único y trazable, y hace que al completarse el formulario se disparen por sí solas las siete notificaciones mediante n8n. Esto significa pasar de horas o días de gestión manual a minutos, ya que las ramas se ejecutan en paralelo.
-
-**Qué se controla:** RRHH y la jefatura pueden ver el estado de cada documento (pendiente, enviado o recibido) en un solo medio, con fecha de solicitud y recepción, lo que permite detectar a tiempo los casos que se demoran.
-
-**Qué se mide:**
-
-| Indicador | Definición | Línea base | Meta |
-|---|---|---|---|
-| Duración total del proceso | Del envío del formulario al cierre del proceso | Hasta 1,5 semanas | Reducir |
-| Duración por etapa | Tiempo transcurrido en cada etapa | Sin medición | Registrar |
-| Latencia de notificaciones | Del formulario al disparo de notificaciones | Horas o días | Menos de 5 min |
-| Documentos pendientes | Documentos sin recepcionar tras N días | Sin medición | A la baja |
-| Tiempo de firma en Buk | Del envío a firma a la firma efectiva | Aprox. 1,5 semanas | Seguimiento |
-
-La automatización no elimina todos los cuellos de botella: el tiempo de firma en Buk depende de un tercero, por lo que se incorpora como indicador de seguimiento y no como meta a reducir. Lo que sí cambia es que pasa a ser medible.
+La correspondencia tarea BPMN ↔ nodo n8n ↔ tabla está en [`05-automatizacion-n8n.md`](05-automatizacion-n8n.md).

@@ -1,0 +1,4 @@
+# Solo para el visor opcional (app/app.py) y los scripts de scripts/.
+# La prueba de oro del README NO necesita nada de esto: basta el cliente sqlite3.
+streamlit==1.39.0
+pandas==2.2.3

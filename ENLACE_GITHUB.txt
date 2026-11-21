@@ -1,0 +1,16 @@
+ICN292 - Sistemas de Informacion para la Gestion - Paralelo P101
+Entrega 2 - You Order Me SpA (YOM)
+
+Repositorio: https://github.com/Danielalopezg/ICN292-Proyecto-pyme-YOM
+Version defendida (tag): v1.0-e2
+Enlace directo a la version defendida:
+  https://github.com/Danielalopezg/ICN292-Proyecto-pyme-YOM/tree/v1.0-e2
+
+Integrantes: Juan Pablo Diaz, Vicente Jana, Daniela Lopez, Alex Rebolledo, Felipe Schorr
+
+El repositorio es publico y contiene tambien la Entrega 1 en su historial de commits.
+Para reproducir los resultados basta el cliente sqlite3:
+  sqlite3 db/yom.db < db/schema.sql
+  sqlite3 db/yom.db < db/seed.sql
+  sqlite3 -header -column db/yom.db < db/queries.sql
+Las instrucciones completas estan en el README.md.
